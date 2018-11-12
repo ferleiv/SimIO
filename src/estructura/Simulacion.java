@@ -33,7 +33,7 @@ public class Simulacion {
 
     public Simulacion(int tiempoTotal, int timeout) {
         reloj = 0;
-        this.tiempoTotal = tiempoTotal * 1000;
+        this.tiempoTotal = tiempoTotal;
         colaEventos = new PriorityQueue<>();
         estadisticas = new Estadisticas();
         modulos = new EnumMap<>(TipoModulo.class);
@@ -54,11 +54,10 @@ public class Simulacion {
     public Resultados realizarSimulacion() {
         ((CPU) modulos.get(TipoModulo.CPU)).generarEntrada(); // Primera llegada
         progress.set((long) reloj);
-
         while (colaEventos.peek().getTiempoEvento() < tiempoTotal) {
             Evento eventoActual = colaEventos.poll();
             reloj = eventoActual.getTiempoEvento();
-
+            System.out.print( Double.toString(getReloj()) + " " + eventoActual.getTipoEvento() + "\n");
             switch (eventoActual.getTipoEvento()) {
                 case LLEGADA:
                     eventoActual.getModulo().procesarEntrada(eventoActual.getPrograma());
@@ -70,10 +69,7 @@ public class Simulacion {
                     eventoActual.getPrograma().getModuloActual().procesarSalida(eventoActual.getPrograma());
                     break;
             }
-
             resultadosParcialesMasRecientes = retornarDatosParciales();
-
-
             progress.set((long) reloj);
         }
 

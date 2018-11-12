@@ -1,3 +1,5 @@
+import estructura.estadisticas.ResultadosFinales;
+import estructura.simulacion.Ejecucion;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +19,7 @@ public class Main /*extends Application*/ {
     }*/
 
     public static void main(String[] args) {
-        launch(args);
+        Ejecucion exec = new Ejecucion( 1,10000, 100 );
+        ResultadosFinales RF = exec.realizarEjecucciones();
     }
 }

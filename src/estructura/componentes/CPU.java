@@ -13,30 +13,30 @@ public class CPU extends Modulo {
 
     public CPU(Simulacion simulacion, int numeroServidores, int timeout) {
         super(simulacion, numeroServidores);
-        this.timeout = timeout * 1000;
-        lambda = 0.30;
+        this.timeout = timeout;
+        lambda = 0.03333;
     }
 
     public void setSiguienteModulo(Modulo siguienteModulo) {
         this.siguienteModulo = siguienteModulo;
     }
 
-    /*@Override
+    //@Override
     public void procesarEntrada(Programa programa) {
             // Servidores disponibles?
             if (numeroServidoresDisponibles > 0) {
                 numeroServidoresDisponibles--;
                 generarTimeout(programa);
-                siguienteModulo.procesarEntrada(programa);
+                //siguienteModulo.procesarEntrada(programa);
             } else {
                 // Se rechaza conexion
-                simulacion.getEstadisticas().anadirConexionDescartada();
+                //simulacion.getEstadisticas().anadirConexionDescartada();
+                colaProgramas.add(programa);
             }
             generarEntrada();
             programa.setModuloActual(this);
             generarSalida(programa);
         }
-    }*/
 
     public void generarEntrada() {
         double tiempo = simulacion.getReloj() + Distribuciones.generarValorDistibucionExponencial(lambda);

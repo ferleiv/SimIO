@@ -32,16 +32,17 @@ public abstract class Modulo {
         this.siguienteModulo = siguienteModulo;
     }
 
-    public void procesarEntrada(Programa programa) {
-        programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
+   public void procesarEntrada(Programa programa) {
+        /*programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
         programa.setModuloActual(this);
         // Servidores disponibles?
         if (numeroServidoresDisponibles > 0) {
             numeroServidoresDisponibles--;
             generarSalida(programa);
+
         } else {
             colaProgramas.add(programa);
-        }
+        }*/
     }
 
     public void procesarSalida(Programa programa) {
@@ -49,7 +50,7 @@ public abstract class Modulo {
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
 
-        finalizacionProgramaProcesado(programa);
+        //finalizacionProgramaProcesado(programa);
         siguientePrograma();
     }
 
@@ -65,9 +66,9 @@ public abstract class Modulo {
         }
     }
 
-    private void finalizacionProgramaProcesado(Programa programa) {
+    /*private void finalizacionProgramaProcesado(Programa programa) {
             siguienteModulo.procesarEntrada(programa);
-    }
+    }*/
 
     protected void generarSalida(Programa programa) {
         double tiempo = getTiempoSalida(programa);

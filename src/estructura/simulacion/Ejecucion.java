@@ -1,8 +1,10 @@
 package estructura.simulacion;
 
 import estructura.Simulacion;
+import estructura.estadisticas.ResultadosFinales;
 import estructura.tipos.TipoModulo;
 import estructura.estadisticas.Resultados;
+import javafx.util.Pair;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,7 +31,7 @@ public class Ejecucion {
         return simulacion;
     }
 
-    /*public ResultadosFinales realizarEjecucciones() {
+    public ResultadosFinales realizarEjecucciones() {
         for (int i = 0; i < veces; i++) {
             ultimosResultados = simulacion.realizarSimulacion();
 
@@ -40,7 +42,7 @@ public class Ejecucion {
         // Si se corre una sola vez, la tabla t-student se cae
         return veces == 1 ? new ResultadosFinales(ultimosResultados, new Pair<>(0.0, 0.0)) :
                 new ResultadosFinales(getPromediosTodasEjecuciones(), getIntervaloConfianzaTiempoVidaConexion());
-    }*/
+    }
 
     public Resultados getUltimosResultados() {
         return ultimosResultados;
@@ -50,8 +52,8 @@ public class Ejecucion {
         return numeroEjecuccion;
     }
 
-    /*public Pair<Double, Double> getIntervaloConfianzaTiempoVidaConexion() {
-        SummaryStatistics estadistica = new SummaryStatistics();
+    public Pair<Double, Double> getIntervaloConfianzaTiempoVidaConexion() {
+        /*SummaryStatistics estadistica = new SummaryStatistics();
         resultados.forEach(resultado -> estadistica.addValue(resultado.tiempoPromedioVidaConexion));
 
         TDistribution tDist = new TDistribution(estadistica.getN() - 1);
@@ -59,8 +61,9 @@ public class Ejecucion {
         double critVal = tDist.inverseCumulativeProbability(1.0 - (1 - 0.95) / 2);
 
         double intervaloConfianza = critVal * estadistica.getStandardDeviation() / Math.sqrt(estadistica.getN());
-        return new Pair<>(estadistica.getMean() - intervaloConfianza, estadistica.getMean() + intervaloConfianza);
-    }*/
+        return new Pair<>(estadistica.getMean() - intervaloConfianza, estadistica.getMean() + intervaloConfianza);*/
+        return new Pair<>(0.0,0.0);
+    }
 
     public Resultados getPromediosTodasEjecuciones() {
         Map<TipoModulo, Double> tamanoPromColaAcm = Arrays.stream(TipoModulo.values())
