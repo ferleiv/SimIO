@@ -29,7 +29,7 @@ public class CPU extends Modulo {
                 generarTimeout(programa);
                 //siguienteModulo.procesarEntrada(programa);
             } else {
-                // Se rechaza conexion
+                // Se rechaza asignacion de CPU
                 //simulacion.getEstadisticas().anadirConexionDescartada();
                 colaProgramas.add(programa);
             }

@@ -19,7 +19,7 @@ public class Main /*extends Application*/ {
     }*/
 
     public static void main(String[] args) {
-        Ejecucion exec = new Ejecucion( 1,10000, 100 );
+        Ejecucion exec = new Ejecucion( 1,1000000, 100 );
         ResultadosFinales RF = exec.realizarEjecucciones();
     }
 }

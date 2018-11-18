@@ -57,7 +57,10 @@ public class Simulacion {
         while (colaEventos.peek().getTiempoEvento() < tiempoTotal) {
             Evento eventoActual = colaEventos.poll();
             reloj = eventoActual.getTiempoEvento();
-            System.out.print( Double.toString(getReloj()) + " " + eventoActual.getTipoEvento() + "\n");
+            System.out.print( Double.toString(getReloj()) + " " + eventoActual.getTipoEvento()
+                     + " " + eventoActual.getModulo().datosActuales()
+                    + " Sacar tiempo servicio " + eventoActual.getModulo().getEstadisticasComponente().sacarTiempoPromedioServicio() + "\n");
+
             switch (eventoActual.getTipoEvento()) {
                 case LLEGADA:
                     eventoActual.getModulo().procesarEntrada(eventoActual.getPrograma());
