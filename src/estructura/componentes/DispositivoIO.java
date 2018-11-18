@@ -26,7 +26,7 @@ public class DispositivoIO extends Modulo {
     @Override
     protected double getTiempoSalida(Programa programa) {
         Random rand = new Random();
-        return sqrt((rand.nextDouble() * 3) + 1);
+        return 20*sqrt((rand.nextDouble() * 3) + 1);
     }
 
     @Override
