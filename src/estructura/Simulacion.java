@@ -26,24 +26,25 @@ public class Simulacion {
     private Estadisticas estadisticas;
 
     private final long tiempoTotal;
-    private boolean modoLento;
+    private final int dist_option;
 
     private Datos resultadosParcialesMasRecientes;
     private final ReadOnlyLongWrapper progress;
 
-    public Simulacion(int tiempoTotal, int timeout) {
+    public Simulacion(int tiempoTotal, int quantum, int dist_option) {
         reloj = 0;
         this.tiempoTotal = tiempoTotal;
+        this.dist_option = dist_option;
         colaEventos = new PriorityQueue<>();
         estadisticas = new Estadisticas();
         modulos = new EnumMap<>(TipoModulo.class);
-        inicializadorModulos(timeout);
+        inicializadorModulos(quantum, dist_option);
         progress = new ReadOnlyLongWrapper(this, "progress");
     }
 
-    private void inicializadorModulos(int timeout) {
+    private void inicializadorModulos(int timeout, int dist_option) {
 
-        Modulo moduloCPU = new CPU(this, 1, timeout);
+        Modulo moduloCPU = new CPU(this, 1, timeout, dist_option);
         Modulo moduloIO = new DispositivoIO(this, moduloCPU, 1); // 2
         ((CPU) moduloCPU).setSiguienteModulo(moduloIO); // 1
 

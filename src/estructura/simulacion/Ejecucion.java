@@ -14,14 +14,15 @@ public class Ejecucion {
     private final Simulacion simulacion;
     private List<Resultados> resultados;
     private final int veces;
+    private final int dist_option;
     private final Queue<Observer> observersQueue;
     private Resultados ultimosResultados;
     private int numeroEjecuccion;
 
-    public Ejecucion(int veces, int tiempoTotal, int timeout
-                              ) {
+    public Ejecucion(int veces, int tiempoTotal, int quantum, int dist_option) {
         this.veces = veces;
-        simulacion = new Simulacion(tiempoTotal, timeout);
+        this.dist_option = dist_option;
+        simulacion = new Simulacion(tiempoTotal, quantum, dist_option);
         resultados = new LinkedList<>();
         observersQueue = new LinkedList<>();
         numeroEjecuccion = 0;
@@ -47,6 +48,8 @@ public class Ejecucion {
     public Resultados getUltimosResultados() {
         return ultimosResultados;
     }
+
+    public List<Resultados> getResultados() { return resultados; }
 
     public int getNumeroEjecuccion() {
         return numeroEjecuccion;

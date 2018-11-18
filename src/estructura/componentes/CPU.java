@@ -9,11 +9,13 @@ import estructura.evento.TipoEvento;
 public class CPU extends Modulo {
 
     private final int timeout;
+    private final int dist_option;
     private final double lambda;
 
-    public CPU(Simulacion simulacion, int numeroServidores, int timeout) {
+    public CPU(Simulacion simulacion, int numeroServidores, int timeout, int dist_option) {
         super(simulacion, numeroServidores);
         this.timeout = timeout;
+        this.dist_option = dist_option;
         lambda = 0.03333;
     }
 
@@ -39,7 +41,12 @@ public class CPU extends Modulo {
         }
 
     public void generarEntrada() {
-        double tiempo = simulacion.getReloj() + Distribuciones.generarValorDistibucionExponencial(lambda);
+        double tiempo = 0;
+        if (dist_option == 1) {
+            tiempo = simulacion.getReloj() + Distribuciones.generarValorDistibucionExponencial(lambda);
+        } else {
+            tiempo = simulacion.getReloj() + Distribuciones.generarValorDistribucionNormal(25, 4);
+        }
         Programa programa = new Programa(this,
                 tiempo);
         simulacion.anadirEvento(new Evento(tiempo, this, TipoEvento.LLEGADA, programa));
