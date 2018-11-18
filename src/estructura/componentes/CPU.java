@@ -12,11 +12,14 @@ public class CPU extends Modulo {
     private final int dist_option;
     private final double lambda;
 
+    private double tiempoUso; // Anyelo
+
     public CPU(Simulacion simulacion, int numeroServidores, int timeout, int dist_option) {
         super(simulacion, numeroServidores);
         this.timeout = timeout;
         this.dist_option = dist_option;
         lambda = 0.03333;
+        tiempoUso=0;    //Anyelo
     }
 
     public void setSiguienteModulo(Modulo siguienteModulo) {
@@ -56,6 +59,8 @@ public class CPU extends Modulo {
     public void procesarSalida(Programa programa) {
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
+
+        tiempoUso += programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj());
 
         simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
         simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(

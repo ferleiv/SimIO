@@ -8,7 +8,7 @@ public class ResultadosFinales extends Resultados {
 
     public ResultadosFinales(Resultados resultados, Pair<Double, Double> intevaloConfianza) {
         super(resultados.numeroConexionesCompletadas, resultados.tiempoPromedioVidaConexion,
-                resultados.tamanoPromedioCola);
+                resultados.tamanoPromedioCola, resultados.tiempoPromedioUsoCPU);
         this.interavaloConfianzaPiso = intevaloConfianza.getKey();
         this.getInteravaloConfianzaTecho = intevaloConfianza.getValue();
     }
