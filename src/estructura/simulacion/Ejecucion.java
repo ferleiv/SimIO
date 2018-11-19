@@ -41,8 +41,8 @@ public class Ejecucion {
         }
 
         // Si se corre una sola vez, la tabla t-student se cae
-        return veces == 1 ? new ResultadosFinales(ultimosResultados, new Pair<>(0.0, 0.0)) :
-                new ResultadosFinales(getPromediosTodasEjecuciones(), getIntervaloConfianzaTiempoVidaConexion());
+        return veces == 1 ? new ResultadosFinales(ultimosResultados, new Pair<>(0.0, 0.0),simulacion.getEstadisticas().getTiempoUsoCPU()) :
+                new ResultadosFinales(getPromediosTodasEjecuciones(), getIntervaloConfianzaTiempoVidaConexion(),simulacion.getEstadisticas().getTiempoUsoCPU());
     }
 
     public Resultados getUltimosResultados() {
@@ -75,12 +75,10 @@ public class Ejecucion {
         Map<TipoModulo, Double> tiempoPromedioAcm = Arrays.stream(TipoModulo.values())
                 .collect(Collectors.toMap(Function.identity(), d -> 0.0));
 
-        Map<TipoModulo, Double> tiempoPromedioUsoCPU = Arrays.stream(TipoModulo.values())
-                .collect(Collectors.toMap(Function.identity(), d -> 0.0));
 
         double promedioPromediosVidaPrograma = 0;
         int numeroProgramasCompletadas = 0;
-        double promedioTiempoUsoCPU=0;
+        double tiempoPromedioUsoCPU;
 
         for (Resultados resultado : resultados) {
             promedioPromediosVidaPrograma += resultado.tiempoPromedioVidaConexion;
@@ -95,8 +93,9 @@ public class Ejecucion {
         tamanoPromColaAcm.forEach((k, v) -> tamanoPromColaAcm.put(k, v / resultados.size()));
         //tiempoPromedioAcm.forEach((modulo, map) -> map.forEach((consulta, map2) -> map.put(consulta, map2 / resultados.size())));
 
-        tiempoPromedioUsoCPU.forEach((CPU, v) -> tiempoPromedioUsoCPU.put(CPU, v / resultados.size()));
+        tiempoPromedioUsoCPU = simulacion.getEstadisticas().getTiempoUsoCPU() / resultados.size();
+
         return new Resultados(numeroProgramasCompletadas, promedioPromediosVidaPrograma,
-                tamanoPromColaAcm, tiempoPromedioUsoCPU.get(TipoModulo.CPU)/*,tiempoPromedioAcm*/);
+                tamanoPromColaAcm, tiempoPromedioUsoCPU/*,tiempoPromedioAcm*/);
     }
 }

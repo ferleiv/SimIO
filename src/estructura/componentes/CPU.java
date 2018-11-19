@@ -61,7 +61,9 @@ public class CPU extends Modulo {
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
 
-        tiempoUso += programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj());
+
+
+        tiempoUso += estadisticasComponente.sacarTiempoPromedioServicio();
 
         simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
         simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
@@ -87,4 +89,6 @@ public class CPU extends Modulo {
     public void liberarConexion() {
         numeroServidoresDisponibles++;
     }
+
+    public double getTiempoUso(){return tiempoUso;}
 }

@@ -60,7 +60,9 @@ public class Simulacion {
             reloj = eventoActual.getTiempoEvento();
             System.out.print( Double.toString(getReloj()) + "\t\t\t" + eventoActual.getTipoEvento()
                      + "\t\t" + eventoActual.getModulo().datosActuales()
-                    + "\t\tSacar tiempo servicio \t\t\t" + eventoActual.getModulo().getEstadisticasComponente().sacarTiempoPromedioServicio() + "\n");
+                    + "\t\tSacar tiempo servicio \t\t\t" + eventoActual.getModulo().getEstadisticasComponente().sacarTiempoPromedioServicio()
+                    + "\t\tSacar tiempo USO CPU \t\t\t" + ((CPU) modulos.get(TipoModulo.CPU)).getTiempoUso()
+                    + "\n");
 
             switch (eventoActual.getTipoEvento()) {
                 case LLEGADA:
@@ -77,14 +79,20 @@ public class Simulacion {
             progress.set((long) reloj);
         }
 
+        estadisticas.añadirTiempoUsoCPU(((CPU) modulos.get(TipoModulo.CPU)).getTiempoUso());
+
+
         Resultados resultados = estadisticas.obtenerResultados(modulos.entrySet().stream().collect(Collectors.toMap(
                 Map.Entry::getKey,
                 entry -> entry.getValue().getEstadisticasComponente())));
+
+
 
         progress.set(tiempoTotal);
 
         limpiarSimulacion();
         modulos.forEach((tipoModulo, modulo) -> modulo.limpiarModulo());
+
 
         return resultados;
     }

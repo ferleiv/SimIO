@@ -11,7 +11,7 @@ public class Estadisticas {
     private Tiempo promedioVidaPrograma;
     private int numeroProgramasCompletados;
 
-    private double usoCPU=0;  // Anyelo, sumatoria tiempo en cpu de programas
+    private double usoCPU;  // Anyelo, sumatoria tiempo en cpu de programas
 
     public Estadisticas() {
         lambda = 0.0005; // 30 conx por minuto -> 0.0005 conx por milisegundo
@@ -32,6 +32,14 @@ public class Estadisticas {
         this.numeroProgramasCompletados++;
     }
 
+    public void añadirTiempoUsoCPU(double tiempo){
+        usoCPU = tiempo;
+    }
+
+    public double getTiempoUsoCPU(){return usoCPU;}
+
+    public void resetUsoCPU(){usoCPU=0;}
+
     public Resultados obtenerResultados(Map<TipoModulo, EstadisticasComponente> estadisticasModulos) {
         Map<TipoModulo, Double> tamanoPromedioCola = estadisticasModulos.entrySet().stream()
                 .collect(Collectors.toMap(
@@ -43,6 +51,6 @@ public class Estadisticas {
                 tiempoPromedioConsultaPorModulo.put(tipo, estadisticasModulos.get(tipo).sacarTiempoServicioTipoConsulta()));*/
 
         return new Resultados(getNumeroProgramasCompletados(), promedioVidaPrograma.getPromedio(),
-                tamanoPromedioCola, 0 /*, tiempoPromedioConsultaPorModulo*/);
+                tamanoPromedioCola, usoCPU /*, tiempoPromedioConsultaPorModulo*/);
     }
 }
