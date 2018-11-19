@@ -1,5 +1,6 @@
 package estructura.estadisticas;
 
+import estructura.Simulacion;
 import estructura.simulacion.Tiempo;
 
 public class EstadisticasComponente {
@@ -20,11 +21,11 @@ public class EstadisticasComponente {
     }
 
     public double sacarTiempoPromedioCola() {
-        return tiempoEnCola.getPromedio();
+        return 0;
     }
 
     public double sacarTiempoPromedioServicio() {
-        return tiempoServicio.getPromedio();
+        return 0;
     }
 
 }

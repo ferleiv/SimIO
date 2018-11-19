@@ -1,7 +1,6 @@
 package estructura.componentes;
 
 import estructura.evento.TipoSalidaCPU;
-import estructura.simulacion.Distribuciones;
 import estructura.simulacion.Programa;
 import estructura.Simulacion;
 
@@ -32,16 +31,16 @@ public class DispositivoIO extends Modulo {
 
     @Override
     public void procesarSalida(Programa programa, TipoSalidaCPU tipoSalidaCPU) {
-
-        estadisticasComponente.anadirTiempoServicio(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
-
-        //simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
+        /*estadisticasComponente.anadirTiempoServicio(
+                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));*/
+        /*simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
         simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
+                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));*/
+        programa.getEstadisticaPrograma().agregarTiempoUsoIO(simulacion.getReloj());
         programa.setModuloActual(this.siguienteModulo);
         if ( siguienteModulo.numeroServidoresDisponibles > 0 ) {
             siguienteModulo.numeroServidoresDisponibles--;
+            programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
             siguienteModulo.generarSalida(programa);
         } else {
             this.siguienteModulo.colaProgramas.add(programa);

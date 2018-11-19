@@ -79,24 +79,30 @@ public class Ejecucion {
                 .collect(Collectors.toMap(Function.identity(), d -> 0.0));
 
         double promedioPromediosVidaPrograma = 0;
+        double promedioPromediosUsoCPU = 0;
+        double promedioPromediosUsoIO = 0;
         int numeroProgramasCompletadas = 0;
         double promedioTiempoUsoCPU=0;
 
         for (Resultados resultado : resultados) {
             promedioPromediosVidaPrograma += resultado.tiempoPromedioVidaConexion;
             numeroProgramasCompletadas += resultado.numeroConexionesCompletadas;
+            promedioPromediosUsoCPU += resultado.tiempoPromedioUsoCPU;
+            promedioPromediosUsoIO += resultado.tiempoPromedioUsoIO;
 
             resultado.tamanoPromedioCola.forEach((k, v) -> tamanoPromColaAcm.put(k, tamanoPromColaAcm.get(k) + v));
         }
 
         promedioPromediosVidaPrograma /= resultados.size();
         numeroProgramasCompletadas /= resultados.size();
+        promedioPromediosUsoCPU /= resultados.size();
+        promedioPromediosUsoIO /= resultados.size();
 
         tamanoPromColaAcm.forEach((k, v) -> tamanoPromColaAcm.put(k, v / resultados.size()));
         //tiempoPromedioAcm.forEach((modulo, map) -> map.forEach((consulta, map2) -> map.put(consulta, map2 / resultados.size())));
 
         tiempoPromedioUsoCPU.forEach((CPU, v) -> tiempoPromedioUsoCPU.put(CPU, v / resultados.size()));
         return new Resultados(numeroProgramasCompletadas, promedioPromediosVidaPrograma,
-                tamanoPromColaAcm, tiempoPromedioUsoCPU.get(TipoModulo.CPU)/*,tiempoPromedioAcm*/);
+                tamanoPromColaAcm, promedioPromediosUsoCPU, promedioPromediosUsoIO/*,tiempoPromedioAcm*/);
     }
 }

@@ -9,17 +9,19 @@ public class Resultados {
     public final double tiempoPromedioVidaConexion;
     public final int numeroConexionesCompletadas;
     public final double tiempoPromedioUsoCPU;
+    public final double tiempoPromedioUsoIO;
     //Map<TipoModulo, Map<TipoConsulta, Double>> tiempoPromedioPorTipoConsultas
 
 
     public Resultados(int numeroProgramasCompletados, double tiempoPromedioVidaConexion,
                       Map<TipoModulo, Double> tamanoPromedioCola,
-                      double tiempoPromedioUsoCPU/*
+                      double tiempoPromedioUsoCPU, double tiempoPromedioUsoIO/*
                       Map<TipoModulo, Map<TipoConsulta, Double>> tiempoPromedioPorTipoConsultas*/) {
         this.tamanoPromedioCola = tamanoPromedioCola;
         this.tiempoPromedioVidaConexion = tiempoPromedioVidaConexion;
         this.numeroConexionesCompletadas = numeroProgramasCompletados;
         this.tiempoPromedioUsoCPU = tiempoPromedioUsoCPU;
+        this.tiempoPromedioUsoIO = tiempoPromedioUsoIO;
         //this.tiempoPromedioPorTipoConsultas = tiempoPromedioPorTipoConsultas;
     }
 }

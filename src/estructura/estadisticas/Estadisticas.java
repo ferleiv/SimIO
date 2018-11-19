@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 public class Estadisticas {
     private double lambda;
     private Tiempo promedioVidaPrograma;
+    private Tiempo promedioUsoCPU;
+    private Tiempo promedioUsoIO;
     private int numeroProgramasCompletados;
 
     private double usoCPU=0;  // Anyelo, sumatoria tiempo en cpu de programas
@@ -16,12 +18,22 @@ public class Estadisticas {
     public Estadisticas() {
         lambda = 0.0005; // 30 conx por minuto -> 0.0005 conx por milisegundo
         promedioVidaPrograma = new Tiempo();
+        promedioUsoCPU = new Tiempo();
+        promedioUsoIO = new Tiempo();
         numeroProgramasCompletados = 0;
 
     }
 
     public void anadirTiempoConsultaFinalizada(double tiempo) {
         promedioVidaPrograma.anadirTiempoAcumulado(tiempo);
+    }
+
+    public void anadirTiempoUsoCPU(double tiempo) {
+        promedioUsoCPU.anadirTiempoAcumulado(tiempo);
+    }
+
+    public void anadirTiempoUsoIO(double tiempo) {
+        promedioUsoIO.anadirTiempoAcumulado(tiempo);
     }
 
     public int getNumeroProgramasCompletados() {
@@ -42,7 +54,8 @@ public class Estadisticas {
         Arrays.stream(TipoModulo.values()).forEach(tipo ->
                 tiempoPromedioConsultaPorModulo.put(tipo, estadisticasModulos.get(tipo).sacarTiempoServicioTipoConsulta()));*/
 
-        return new Resultados(getNumeroProgramasCompletados(), promedioVidaPrograma.getPromedio(),
-                tamanoPromedioCola, 0 /*, tiempoPromedioConsultaPorModulo*/);
+        return new Resultados(getNumeroProgramasCompletados(), promedioVidaPrograma.getPromedio(numeroProgramasCompletados),
+                tamanoPromedioCola, promedioUsoCPU.getPromedio(numeroProgramasCompletados), promedioUsoIO.getPromedio(numeroProgramasCompletados)
+                /*, tiempoPromedioConsultaPorModulo*/);
     }
 }

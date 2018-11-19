@@ -53,14 +53,17 @@ public class CPU extends Modulo {
 
     @Override
     public void procesarSalida(Programa programa, TipoSalidaCPU tipoSalida) {
-        estadisticasComponente.anadirTiempoServicio(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
-
+        /*estadisticasComponente.anadirTiempoServicio(
+                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));*/
+        /*simulacion.getEstadisticas().anadirTiempoUsoCPU(
+                programa.getEstadisticaPrograma().getTiempoCPU_IO(simulacion.getReloj()));*/
+        programa.getEstadisticaPrograma().agregarTiempoUsoCPU(simulacion.getReloj());
         if ( tipoSalida == TipoSalidaCPU.UNINTERRUPTED ) {
             this.colaProgramas.add(programa);
         } else if ( tipoSalida == TipoSalidaCPU.INTERRUPTED ) {
             programa.setModuloActual(this.siguienteModulo);
             if ( siguienteModulo.numeroServidoresDisponibles > 0 ) {
+                programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
                 siguienteModulo.numeroServidoresDisponibles--;
                 siguienteModulo.generarSalida(programa);
             } else {
@@ -70,6 +73,8 @@ public class CPU extends Modulo {
             simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
             simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
                     programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
+            simulacion.getEstadisticas().anadirTiempoUsoCPU(programa.getEstadisticaPrograma().getTiempoUsoCPU());
+            simulacion.getEstadisticas().anadirTiempoUsoIO(programa.getEstadisticaPrograma().getTiempoUsoIO());
         }
         siguientePrograma();
     }
@@ -84,8 +89,7 @@ public class CPU extends Modulo {
         // Hay clientes esperando en fila?
         Programa siguientePrograma = getSiguientePrograma();
         if (siguientePrograma != null) {
-            estadisticasComponente.anadirTiempoClienteEnCola(
-                    siguientePrograma.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
+            siguientePrograma.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
             generarSalida(siguientePrograma);
         } else {
             numeroServidoresDisponibles++;

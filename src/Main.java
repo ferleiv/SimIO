@@ -58,7 +58,7 @@ public class Main /*extends Application*/ {
         }
     }
 
-    public static void print_results(List<Resultados> results){
+    public static void print_results(List<Resultados> results, int tiempoTotal){
         String space = "   |   ";
         DecimalFormat df = new DecimalFormat("#.####");
         System.out.print("Resultados de cada corrida:\n");
@@ -66,35 +66,39 @@ public class Main /*extends Application*/ {
         for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + "  #" + (i+1) + "  " ); }
         System.out.print("\nTiempo prom. en sistema: ");
         for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(results.get(i).tiempoPromedioVidaConexion)); }
-
         System.out.print("\nTiempo prom. uso CPU:    ");
         for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(results.get(i).tiempoPromedioUsoCPU)); }
-
         System.out.print("\nOcupación del servidor:  ");
-
+        for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format((results.get(i).tiempoPromedioUsoCPU/tiempoTotal))); }
         System.out.print("\nTiempo prom. uso E/S:    ");
-
+        for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(results.get(i).tiempoPromedioUsoIO)); }
         System.out.print("\nTiempo prom. en colas:   ");
+        for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format((results.get(i).tiempoPromedioVidaConexion
+                - (results.get(i).tiempoPromedioUsoCPU + results.get(i).tiempoPromedioUsoIO)))); }
+        System.out.print("\nCoef. de Eficiencia:     ");
+        for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(((results.get(i).tiempoPromedioVidaConexion
+                - (results.get(i).tiempoPromedioUsoCPU + results.get(i).tiempoPromedioUsoIO)) / results.get(i).tiempoPromedioVidaConexion ))); }
     }
 
-    public static void print_final_results(ResultadosFinales RF){
+    public static void print_final_results(ResultadosFinales RF, int tiempoTotal){
         DecimalFormat df = new DecimalFormat("#.####");
         System.out.print("\n\nResultados promedio de todas las corridas:\n");
         System.out.print("\nTiempo prom. en sistema: " + df.format(RF.tiempoPromedioVidaConexion));
         System.out.print("\nTiempo prom. uso CPU:    " + df.format(RF.tiempoPromedioUsoCPU));
-        System.out.print("\nOcupación del servidor:  ");
-        System.out.print("\nTiempo prom. uso E/S:    ");
-        System.out.print("\nTiempo prom. en colas:   ");
+        System.out.print("\nOcupación del servidor:  " + df.format(RF.tiempoPromedioUsoCPU / tiempoTotal));
+        System.out.print("\nTiempo prom. uso E/S:    " + df.format( RF.tiempoPromedioUsoIO ));
+        System.out.print("\nCoef. de eficiencia:     " + df.format( (RF.tiempoPromedioVidaConexion
+                - (RF.tiempoPromedioUsoCPU + RF.tiempoPromedioUsoIO)) / RF.tiempoPromedioVidaConexion ));
     }
 
     public static void main(String[] args) throws IOException {
         int[] params = {0,0,0,0};
-        //get_parameters(params, 0);
-        //Ejecucion exec = new Ejecucion( params[0], params[1], params[2], params[3] );
-        Ejecucion exec = new Ejecucion( 3, 1000, 100, 1);
+        get_parameters(params, 0);
+        Ejecucion exec = new Ejecucion( params[0], params[1], params[2], params[3] );
+        //Ejecucion exec = new Ejecucion( 10, 1000, 30, 1);
         ResultadosFinales RF = exec.realizarEjecucciones();
-        print_results( exec.getResultados() );
-        print_final_results(RF);
+        print_results( exec.getResultados(), params[1] );
+        print_final_results(RF, params[1] );
         //System.out.print( params[0] + "" + params [1] + "" + params[2] + "" + params[3]);
     }
 }

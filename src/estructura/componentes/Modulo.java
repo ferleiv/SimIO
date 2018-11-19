@@ -63,8 +63,7 @@ public abstract class Modulo {
         // Hay clientes esperando en fila?
         Programa siguientePrograma = getSiguientePrograma();
         if (siguientePrograma != null) {
-            estadisticasComponente.anadirTiempoClienteEnCola(
-                    siguientePrograma.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
+            siguientePrograma.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
             generarSalida(siguientePrograma);
         } else {
             numeroServidoresDisponibles++;

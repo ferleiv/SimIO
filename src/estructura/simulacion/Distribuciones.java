@@ -11,8 +11,8 @@ public class Distribuciones {
     private static final Map<TipoSalidaCPU, Double> distribucionTipoSalidaCPU = new EnumMap<>(TipoSalidaCPU.class);
 
     static {
-        distribucionTipoSalidaCPU.put(TipoSalidaCPU.UNINTERRUPTED, 0.70);
-        distribucionTipoSalidaCPU.put(TipoSalidaCPU.INTERRUPTED, 0.94);
+        distribucionTipoSalidaCPU.put(TipoSalidaCPU.UNINTERRUPTED, 0.50);
+        distribucionTipoSalidaCPU.put(TipoSalidaCPU.INTERRUPTED, 0.70);
         distribucionTipoSalidaCPU.put(TipoSalidaCPU.ENDED, (double) 1);
     }
 
