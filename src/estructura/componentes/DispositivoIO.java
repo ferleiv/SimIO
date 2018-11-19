@@ -21,24 +21,18 @@ public class DispositivoIO extends Modulo {
     }
 
     /*
-    * Tiempo de salida entre 40s y 20 s
-    * */
+     * Tiempo de salida entre 40s y 20 s
+     * */
     @Override
     protected double getTiempoSalida(Programa programa) {
         Random rand = new Random();
-        return sqrt((rand.nextDouble() * 3) + 1);
+        return 20 * sqrt((rand.nextDouble() * 3) + 1);
     }
+
 
     @Override
     public void procesarSalida(Programa programa) {
-
-        estadisticasComponente.anadirTiempoServicio(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
-
-        simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
-        simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
-        /**/
+        estadisticasComponente.anadirTiempoServicio(getTiempoSalida(programa));
     }
 
 

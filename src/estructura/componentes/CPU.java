@@ -57,6 +57,7 @@ public class CPU extends Modulo {
 
     @Override
     public void procesarSalida(Programa programa) {
+
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
 
@@ -66,6 +67,7 @@ public class CPU extends Modulo {
         simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
                 programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
         simulacion.eliminarEvento(programa);
+
         liberarConexion();
     }
 
