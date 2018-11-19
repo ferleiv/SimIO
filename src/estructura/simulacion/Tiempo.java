@@ -17,4 +17,6 @@ public class Tiempo {
     public double getPromedio() {
         return conteo == 0 ? 0.0 : tiempo / conteo;
     }
+
+    public double getTiempo(){return  tiempo;} // Anyelo
 }

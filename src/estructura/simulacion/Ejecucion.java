@@ -75,8 +75,12 @@ public class Ejecucion {
         Map<TipoModulo, Double> tiempoPromedioAcm = Arrays.stream(TipoModulo.values())
                 .collect(Collectors.toMap(Function.identity(), d -> 0.0));
 
+        Map<TipoModulo, Double> tiempoPromedioUsoCPU = Arrays.stream(TipoModulo.values())
+                .collect(Collectors.toMap(Function.identity(), d -> 0.0));
+
         double promedioPromediosVidaPrograma = 0;
         int numeroProgramasCompletadas = 0;
+        double promedioTiempoUsoCPU=0;
 
         for (Resultados resultado : resultados) {
             promedioPromediosVidaPrograma += resultado.tiempoPromedioVidaConexion;
@@ -91,7 +95,8 @@ public class Ejecucion {
         tamanoPromColaAcm.forEach((k, v) -> tamanoPromColaAcm.put(k, v / resultados.size()));
         //tiempoPromedioAcm.forEach((modulo, map) -> map.forEach((consulta, map2) -> map.put(consulta, map2 / resultados.size())));
 
+        tiempoPromedioUsoCPU.forEach((CPU, v) -> tiempoPromedioUsoCPU.put(CPU, v / resultados.size()));
         return new Resultados(numeroProgramasCompletadas, promedioPromediosVidaPrograma,
-                tamanoPromColaAcm/*,tiempoPromedioAcm*/);
+                tamanoPromColaAcm, tiempoPromedioUsoCPU.get(TipoModulo.CPU)/*,tiempoPromedioAcm*/);
     }
 }

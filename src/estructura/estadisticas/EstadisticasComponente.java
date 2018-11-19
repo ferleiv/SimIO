@@ -26,4 +26,5 @@ public class EstadisticasComponente {
     public double sacarTiempoPromedioServicio() {
         return tiempoServicio.getPromedio();
     }
+
 }
