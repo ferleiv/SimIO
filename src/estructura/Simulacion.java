@@ -46,7 +46,8 @@ public class Simulacion {
 
         Modulo moduloCPU = new CPU(this, 1, timeout, dist_option);
         Modulo moduloIO = new DispositivoIO(this, moduloCPU, 1); // 2
-        ((CPU) moduloCPU).setSiguienteModulo(moduloIO); // 1
+        ((CPU) moduloCPU).setSiguienteModulo(moduloIO);
+        ((DispositivoIO) moduloIO).setSiguienteModulo(moduloCPU);// 1
 
         modulos.put(TipoModulo.CPU, moduloCPU);
         modulos.put(TipoModulo.IO, moduloIO);
@@ -58,19 +59,19 @@ public class Simulacion {
         while (colaEventos.peek().getTiempoEvento() < tiempoTotal) {
             Evento eventoActual = colaEventos.poll();
             reloj = eventoActual.getTiempoEvento();
-            System.out.print( Double.toString(getReloj()) + "\t\t\t" + eventoActual.getTipoEvento()
-                     + "\t\t" + eventoActual.getModulo().datosActuales()
-                    + "\t\tSacar tiempo servicio \t\t\t" + eventoActual.getModulo().getEstadisticasComponente().sacarTiempoPromedioServicio() + "\n");
+            System.out.print( Double.toString(getReloj()) + "\t\t\t" + eventoActual.getTipoEvento() /*+ "\t\t\t" + eventoActual.getTipoSalida()*/
+                     /*+ "\t\t" + eventoActual.getModulo().datosActuales()
+                    + "\t\tSacar tiempo servicio \t\t\t" + eventoActual.getModulo().getEstadisticasComponente().sacarTiempoPromedioServicio() */+ "\n");
 
             switch (eventoActual.getTipoEvento()) {
                 case LLEGADA:
                     eventoActual.getModulo().procesarEntrada(eventoActual.getPrograma());
                     break;
-                case SALIDA:
-                    eventoActual.getModulo().procesarSalida(eventoActual.getPrograma());
+                case SALIDACPU:
+                    eventoActual.getModulo().procesarSalida(eventoActual.getPrograma(), eventoActual.getTipoSalida());
                     break;
-                case TIMEOUT:
-                    eventoActual.getPrograma().getModuloActual().procesarSalida(eventoActual.getPrograma());
+                case SALIDAIO:
+                    eventoActual.getModulo().procesarSalida(eventoActual.getPrograma(),eventoActual.getTipoSalida());
                     break;
             }
             resultadosParcialesMasRecientes = retornarDatosParciales();

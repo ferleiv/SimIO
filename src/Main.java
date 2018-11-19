@@ -68,9 +68,7 @@ public class Main /*extends Application*/ {
         for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(results.get(i).tiempoPromedioVidaConexion)); }
 
         System.out.print("\nTiempo prom. uso CPU:    ");
-        for ( int i = 0; i < results.size(); i++ ) {
-            System.out.print(space + results.get(i).tiempoPromedioUsoCPU);
-        }
+        for ( int i = 0; i < results.size(); i++ ) { System.out.print(space + df.format(results.get(i).tiempoPromedioUsoCPU)); }
 
         System.out.print("\nOcupación del servidor:  ");
 
@@ -83,8 +81,8 @@ public class Main /*extends Application*/ {
         DecimalFormat df = new DecimalFormat("#.####");
         System.out.print("\n\nResultados promedio de todas las corridas:\n");
         System.out.print("\nTiempo prom. en sistema: " + df.format(RF.tiempoPromedioVidaConexion));
-        System.out.print("\nTiempo prom. uso CPU:    " + df.format(RF.tiempoPromedioUsoCPU));       // Anyelo
-        System.out.print("\nOcupación del servidor:  ");    // Anyelo
+        System.out.print("\nTiempo prom. uso CPU:    " + df.format(RF.tiempoPromedioUsoCPU));
+        System.out.print("\nOcupación del servidor:  ");
         System.out.print("\nTiempo prom. uso E/S:    ");
         System.out.print("\nTiempo prom. en colas:   ");
     }
@@ -93,7 +91,7 @@ public class Main /*extends Application*/ {
         int[] params = {0,0,0,0};
         //get_parameters(params, 0);
         //Ejecucion exec = new Ejecucion( params[0], params[1], params[2], params[3] );
-        Ejecucion exec = new Ejecucion( 4, 10000, 13, 1);
+        Ejecucion exec = new Ejecucion( 3, 1000, 100, 1);
         ResultadosFinales RF = exec.realizarEjecucciones();
         print_results( exec.getResultados() );
         print_final_results(RF);

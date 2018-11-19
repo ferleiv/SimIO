@@ -1,10 +1,20 @@
 package estructura.simulacion;
 
+import estructura.evento.TipoSalidaCPU;
+
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Distribuciones {
+
+    private static final Map<TipoSalidaCPU, Double> distribucionTipoSalidaCPU = new EnumMap<>(TipoSalidaCPU.class);
+
+    static {
+        distribucionTipoSalidaCPU.put(TipoSalidaCPU.UNINTERRUPTED, 0.70);
+        distribucionTipoSalidaCPU.put(TipoSalidaCPU.INTERRUPTED, 0.94);
+        distribucionTipoSalidaCPU.put(TipoSalidaCPU.ENDED, (double) 1);
+    }
 
     private static Random rand = new Random();
 
@@ -18,10 +28,19 @@ public class Distribuciones {
     }
 
     public static double generarValorDistribucionUniforme(int inicioIntervalo, int finalIntervalo) {
-        return (finalIntervalo - inicioIntervalo) * rand.nextDouble() - inicioIntervalo;
+        return (finalIntervalo - inicioIntervalo) * rand.nextDouble()/* - inicioIntervalo*/;
     }
 
     public static double generarValorDistibucionExponencial(double lambda) {
         return Math.log(1 - rand.nextDouble()) / -lambda;
+    }
+
+    public static TipoSalidaCPU generarTipoSalidaCPU() {
+        double random = rand.nextDouble();
+        for (Map.Entry<TipoSalidaCPU, Double> entrada :
+                distribucionTipoSalidaCPU.entrySet()) {
+            if (random < entrada.getValue()) return entrada.getKey();
+        }
+        return TipoSalidaCPU.UNINTERRUPTED;
     }
 }

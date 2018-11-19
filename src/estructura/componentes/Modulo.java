@@ -1,5 +1,6 @@
 package estructura.componentes;
 
+import estructura.evento.TipoSalidaCPU;
 import estructura.simulacion.Evento;
 import estructura.simulacion.Programa;
 import estructura.Simulacion;
@@ -32,6 +33,10 @@ public abstract class Modulo {
         this.siguienteModulo = siguienteModulo;
     }
 
+    public void setSiguienteModulo(Modulo siguienteModulo) {
+        this.siguienteModulo = siguienteModulo;
+    }
+
    public void procesarEntrada(Programa programa) {
         /*programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
         programa.setModuloActual(this);
@@ -45,18 +50,18 @@ public abstract class Modulo {
         }*/
     }
 
-    public void procesarSalida(Programa programa) {
-        // Anade tiempo de servicio
+    public void procesarSalida(Programa programa, TipoSalidaCPU tipoSalida) {
+        /*// Anade tiempo de servicio
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
 
         //finalizacionProgramaProcesado(programa);
-        siguientePrograma();
+        siguientePrograma();*/
     }
 
-    private void siguientePrograma() {
+    protected void siguientePrograma() {
         // Hay clientes esperando en fila?
-        Programa siguientePrograma = getSiguienteConsulta();
+        Programa siguientePrograma = getSiguientePrograma();
         if (siguientePrograma != null) {
             estadisticasComponente.anadirTiempoClienteEnCola(
                     siguientePrograma.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
@@ -75,14 +80,14 @@ public abstract class Modulo {
         simulacion.anadirEvento(new Evento(
                 simulacion.getReloj() + tiempo,
                 this,
-                TipoEvento.SALIDA,
-                programa
+                TipoEvento.SALIDAIO,
+                programa,null
         ));
     }
 
     protected abstract double getTiempoSalida(Programa programa);
 
-    protected Programa getSiguienteConsulta() {
+    protected Programa getSiguientePrograma() {
         return colaProgramas.poll();
     }
 

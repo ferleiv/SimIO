@@ -1,5 +1,6 @@
 package estructura.componentes;
 
+import estructura.evento.TipoSalidaCPU;
 import estructura.simulacion.Distribuciones;
 import estructura.simulacion.Evento;
 import estructura.simulacion.Programa;
@@ -19,29 +20,24 @@ public class CPU extends Modulo {
         this.timeout = timeout;
         this.dist_option = dist_option;
         lambda = 0.03333;
-        tiempoUso=0;    //Anyelo
+        //tiempoUso=0;
     }
 
-    public void setSiguienteModulo(Modulo siguienteModulo) {
-        this.siguienteModulo = siguienteModulo;
-    }
 
     //@Override
     public void procesarEntrada(Programa programa) {
-            // Servidores disponibles?
-            if (numeroServidoresDisponibles > 0) {
-                numeroServidoresDisponibles--;
-                generarTimeout(programa);
-                //siguienteModulo.procesarEntrada(programa);
-            } else {
-                // Se rechaza asignacion de CPU
-                //simulacion.getEstadisticas().anadirConexionDescartada();
-                colaProgramas.add(programa);
-            }
-            generarEntrada();
-            programa.setModuloActual(this);
+        programa.setModuloActual(this);
+        // Servidores disponibles
+        if (numeroServidoresDisponibles > 0) {
+            numeroServidoresDisponibles--;
+            programa.getEstadisticaPrograma().setTiempoLlegadaModulo(simulacion.getReloj());
             generarSalida(programa);
+        } else {
+            // Se rechaza asignacion de CPU
+            colaProgramas.add(programa);
         }
+        generarEntrada();
+    }
 
     public void generarEntrada() {
         double tiempo = 0;
@@ -52,23 +48,30 @@ public class CPU extends Modulo {
         }
         Programa programa = new Programa(this,
                 tiempo);
-        simulacion.anadirEvento(new Evento(tiempo, this, TipoEvento.LLEGADA, programa));
+        simulacion.anadirEvento(new Evento(tiempo, this, TipoEvento.LLEGADA, programa, null));
     }
 
     @Override
-    public void procesarSalida(Programa programa) {
-
+    public void procesarSalida(Programa programa, TipoSalidaCPU tipoSalida) {
         estadisticasComponente.anadirTiempoServicio(
                 programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
 
-        tiempoUso += programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj());
-
-        simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
-        simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
-                programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
-        simulacion.eliminarEvento(programa);
-
-        liberarConexion();
+        if ( tipoSalida == TipoSalidaCPU.UNINTERRUPTED ) {
+            this.colaProgramas.add(programa);
+        } else if ( tipoSalida == TipoSalidaCPU.INTERRUPTED ) {
+            programa.setModuloActual(this.siguienteModulo);
+            if ( siguienteModulo.numeroServidoresDisponibles > 0 ) {
+                siguienteModulo.numeroServidoresDisponibles--;
+                siguienteModulo.generarSalida(programa);
+            } else {
+                this.siguienteModulo.colaProgramas.add(programa);
+            }
+        } else if ( tipoSalida == TipoSalidaCPU.ENDED ) {
+            simulacion.getEstadisticas().anadirNumeroConexionesCompletadas();
+            simulacion.getEstadisticas().anadirTiempoConsultaFinalizada(
+                    programa.getEstadisticaPrograma().getTiempoDeVida(simulacion.getReloj()));
+        }
+        siguientePrograma();
     }
 
     @Override
@@ -76,12 +79,29 @@ public class CPU extends Modulo {
         return (double)Distribuciones.generarValorDistibucionExponencial(.70);
     }
 
-    private void generarTimeout(Programa programa) {
+    @Override
+    protected void siguientePrograma() {
+        // Hay clientes esperando en fila?
+        Programa siguientePrograma = getSiguientePrograma();
+        if (siguientePrograma != null) {
+            estadisticasComponente.anadirTiempoClienteEnCola(
+                    siguientePrograma.getEstadisticaPrograma().getTiempoDesdeLlegadaModulo(simulacion.getReloj()));
+            generarSalida(siguientePrograma);
+        } else {
+            numeroServidoresDisponibles++;
+        }
+    }
+
+    @Override
+    protected void generarSalida(Programa programa) {
+        TipoSalidaCPU tipoSalidaCPU = Distribuciones.generarTipoSalidaCPU();
+        double tiempoSalida = simulacion.getReloj() +
+                (( tipoSalidaCPU != tipoSalidaCPU.ENDED ) ? Distribuciones.generarValorDistribucionUniforme(timeout/2, timeout) : timeout );
         simulacion.anadirEvento(new Evento(
-                simulacion.getReloj() + timeout,
-                null,
-                TipoEvento.TIMEOUT,
-                programa));
+                tiempoSalida,
+                this,
+                TipoEvento.SALIDACPU,
+                programa, tipoSalidaCPU));
     }
 
     public void liberarConexion() {
